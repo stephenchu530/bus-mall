@@ -16,13 +16,13 @@ let survey = document.getElementById('survey');
 let remainingVotes = 25;
 
 // Store item constructor
-let storeItem = function(imageName) {
+let StoreItem = function(imageName) {
   this.name = imageName.split('.')[0];
   this.filepath = `img/${imageName}`;
   this.views = 0;
   this.votes = 0;
   allStoreItems.push(this);
-}
+};
 
 // Function to fill the current array with new items; no repeats
 let get3NewItems = function() {
@@ -36,7 +36,7 @@ let get3NewItems = function() {
     curr3Items[item] = allStoreItems[rand];
     allStoreItems[rand].views++;
   });
-}
+};
 
 // Function to render items
 let renderItems = function () {
@@ -48,7 +48,7 @@ let renderItems = function () {
   });
   let remaining = document.getElementById('remainingVotes');
   remaining.textContent = remainingVotes;
-}
+};
 
 // Event handler for user selection
 let handleItemSelect = function(e) {
@@ -57,34 +57,52 @@ let handleItemSelect = function(e) {
     curr3Items[e.target.id].votes++;
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
+      renderResults();
     } else {
       get3NewItems();
     }
     renderItems();
   }
-}
+};
+
+// Function to display results
+let renderResults = function() {
+  let results = document.getElementById('results');
+  appendNewElement('Results:', 'th', results);
+  allStoreItems.forEach(function(item) {
+    let tmp = `${item.votes} votes for ${item.name}`;
+    appendNewElement(tmp, 'tr', results);
+  });
+};
+
+// Helper function to create and append new element into parent
+let appendNewElement = function(content, tag, parentElement) {
+  let newElement = document.createElement(tag);
+  newElement.textContent = content;
+  parentElement.appendChild(newElement);
+};
 
 // Make store items
-new storeItem('bag.jpg');
-new storeItem('banana.jpg');
-new storeItem('bathroom.jpg');
-new storeItem('boots.jpg');
-new storeItem('breakfast.jpg');
-new storeItem('bubblegum.jpg');
-new storeItem('chair.jpg');
-new storeItem('cthulhu.jpg');
-new storeItem('dog-duck.jpg');
-new storeItem('dragon.jpg');
-new storeItem('pen.jpg');
-new storeItem('pet-sweep.jpg');
-new storeItem('scissors.jpg');
-new storeItem('shark.jpg');
-new storeItem('sweep.png');
-new storeItem('tauntaun.jpg');
-new storeItem('unicorn.jpg');
-new storeItem('usb.gif');
-new storeItem('water-can.jpg');
-new storeItem('wine-glass.jpg');
+new StoreItem('bag.jpg');
+new StoreItem('banana.jpg');
+new StoreItem('bathroom.jpg');
+new StoreItem('boots.jpg');
+new StoreItem('breakfast.jpg');
+new StoreItem('bubblegum.jpg');
+new StoreItem('chair.jpg');
+new StoreItem('cthulhu.jpg');
+new StoreItem('dog-duck.jpg');
+new StoreItem('dragon.jpg');
+new StoreItem('pen.jpg');
+new StoreItem('pet-sweep.jpg');
+new StoreItem('scissors.jpg');
+new StoreItem('shark.jpg');
+new StoreItem('sweep.png');
+new StoreItem('tauntaun.jpg');
+new StoreItem('unicorn.jpg');
+new StoreItem('usb.gif');
+new StoreItem('water-can.jpg');
+new StoreItem('wine-glass.jpg');
 
 // Get the first 3 items and render them on screen
 get3NewItems();
