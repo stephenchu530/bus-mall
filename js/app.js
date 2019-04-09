@@ -15,6 +15,10 @@ let survey = document.getElementById('survey');
 // Number of remaining votes
 let remainingVotes = 25;
 
+// Results data and chart object used to render chart
+let resultsData = {};
+let resultsChart;
+
 // Store item constructor
 let StoreItem = function(imageName) {
   this.name = imageName.split('.')[0];
@@ -24,7 +28,7 @@ let StoreItem = function(imageName) {
   allStoreItems.push(this);
 };
 
-// Function to fill the current array with new items; no repeats
+// Function to fill the curr3Items object with new items; no repeats
 let get3NewItems = function() {
   prev3Items = curr3Items;
   curr3Items = {'item1': null, 'item2': null, 'item3': null};
@@ -39,7 +43,7 @@ let get3NewItems = function() {
 };
 
 // Function to render items
-let renderItems = function () {
+let renderItems = function() {
   Object.keys(curr3Items).forEach(function(item) {
     let imgEl = document.getElementById(item);
     imgEl.src = curr3Items[item].filepath;
@@ -50,6 +54,38 @@ let renderItems = function () {
   remaining.textContent = remainingVotes;
 };
 
+// Function to tally votes and fill resultsData object
+let tallyVotes = function() {
+  allStoreItems.forEach(function(item) {
+    resultsData[item.name] = item.votes;
+  });
+};
+
+// CHART STUFF
+// Charts rendered using Chart JS v.2.6.0
+// http://www.chartjs.org/
+let drawChart = function() {
+  let ctx = document.getElementById('resultsChart').getContext('2d');
+  resultsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(resultsData),
+      datasets: [{
+        label: "Vote Results",
+        backgroundColor: "#3e95cd",
+        data: Object.values(resultsData)
+      }]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Vote Results'
+      }
+    }
+  })
+};
+
 // Event handler for user selection
 let handleItemSelect = function(e) {
   if (Object.keys(curr3Items).includes(e.target.id)) {
@@ -57,29 +93,13 @@ let handleItemSelect = function(e) {
     curr3Items[e.target.id].votes++;
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
-      renderResults();
+      tallyVotes();
+      drawChart();
     } else {
       get3NewItems();
     }
     renderItems();
   }
-};
-
-// Function to display results
-let renderResults = function() {
-  let results = document.getElementById('results');
-  appendNewElement('Results:', 'th', results);
-  allStoreItems.forEach(function(item) {
-    let tmp = `${item.votes} votes for ${item.name}`;
-    appendNewElement(tmp, 'tr', results);
-  });
-};
-
-// Helper function to create and append new element into parent
-let appendNewElement = function(content, tag, parentElement) {
-  let newElement = document.createElement(tag);
-  newElement.textContent = content;
-  parentElement.appendChild(newElement);
 };
 
 // Make store items

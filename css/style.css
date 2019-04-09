@@ -44,12 +44,3 @@ img {
 #remainingVotes {
   font-weight: bold;
 }
-
-#results {
-  font-size: 20px;
-  text-align: left;
-}
-
-#results th {
-  font-weight: bold;
-}
