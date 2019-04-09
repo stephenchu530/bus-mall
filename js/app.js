@@ -15,8 +15,9 @@ let survey = document.getElementById('survey');
 // Number of remaining votes
 let remainingVotes = 25;
 
-// Results object used to render chart
-let resultsData = {}
+// Results data and chart object used to render chart
+let resultsData = {};
+let resultsChart;
 
 // Store item constructor
 let StoreItem = function(imageName) {
@@ -58,7 +59,32 @@ let tallyVotes = function() {
   allStoreItems.forEach(function(item) {
     resultsData[item.name] = item.votes;
   });
-}
+};
+
+// CHART STUFF
+// Charts rendered using Chart JS v.2.6.0
+// http://www.chartjs.org/
+let drawChart = function() {
+  let ctx = document.getElementById('resultsChart').getContext('2d');
+  resultsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(resultsData),
+      datasets: [{
+        label: "Vote Results",
+        backgroundColor: "#3e95cd",
+        data: Object.values(resultsData)
+      }]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Vote Results'
+      }
+    }
+  })
+};
 
 // Event handler for user selection
 let handleItemSelect = function(e) {
@@ -68,6 +94,7 @@ let handleItemSelect = function(e) {
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
       tallyVotes();
+      drawChart();
     } else {
       get3NewItems();
     }
