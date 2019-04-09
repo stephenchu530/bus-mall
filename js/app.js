@@ -3,10 +3,10 @@
 // Array storing all store items
 let allStoreItems = [];
 
-// Array containing the previous 3 items
+// Object containing the previous 3 items
 let prev3Items = {'item1': null, 'item2': null, 'item3': null};
 
-// Array containing the current 3 items
+// Object containing the current 3 items
 let curr3Items = {'item1': null, 'item2': null, 'item3': null};
 
 // Survey object in index.html
@@ -40,7 +40,6 @@ let get3NewItems = function() {
 
 // Function to render items
 let renderItems = function () {
-  get3NewItems();
   Object.keys(curr3Items).forEach(function(item) {
     let imgEl = document.getElementById(item);
     imgEl.src = curr3Items[item].filepath;
@@ -56,10 +55,12 @@ let handleItemSelect = function(e) {
   if (Object.keys(curr3Items).includes(e.target.id)) {
     remainingVotes--;
     curr3Items[e.target.id].votes++;
-    renderItems();
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
+    } else {
+      get3NewItems();
     }
+    renderItems();
   }
 }
 
@@ -85,7 +86,8 @@ new storeItem('usb.gif');
 new storeItem('water-can.jpg');
 new storeItem('wine-glass.jpg');
 
-// Display the first selection of items
+// Get the first 3 items and render them on screen
+get3NewItems();
 renderItems();
 
 // Event listener for user selection
