@@ -15,6 +15,9 @@ let survey = document.getElementById('survey');
 // Number of remaining votes
 let remainingVotes = 25;
 
+// Results object used to render chart
+let resultsData = {}
+
 // Store item constructor
 let StoreItem = function(imageName) {
   this.name = imageName.split('.')[0];
@@ -24,7 +27,7 @@ let StoreItem = function(imageName) {
   allStoreItems.push(this);
 };
 
-// Function to fill the current array with new items; no repeats
+// Function to fill the curr3Items object with new items; no repeats
 let get3NewItems = function() {
   prev3Items = curr3Items;
   curr3Items = {'item1': null, 'item2': null, 'item3': null};
@@ -39,7 +42,7 @@ let get3NewItems = function() {
 };
 
 // Function to render items
-let renderItems = function () {
+let renderItems = function() {
   Object.keys(curr3Items).forEach(function(item) {
     let imgEl = document.getElementById(item);
     imgEl.src = curr3Items[item].filepath;
@@ -50,6 +53,13 @@ let renderItems = function () {
   remaining.textContent = remainingVotes;
 };
 
+// Function to tally votes and fill resultsData object
+let tallyVotes = function() {
+  allStoreItems.forEach(function(item) {
+    resultsData[item.name] = item.votes;
+  });
+}
+
 // Event handler for user selection
 let handleItemSelect = function(e) {
   if (Object.keys(curr3Items).includes(e.target.id)) {
@@ -57,6 +67,7 @@ let handleItemSelect = function(e) {
     curr3Items[e.target.id].votes++;
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
+      tallyVotes();
     } else {
       get3NewItems();
     }
