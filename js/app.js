@@ -57,29 +57,11 @@ let handleItemSelect = function(e) {
     curr3Items[e.target.id].votes++;
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
-      renderResults();
     } else {
       get3NewItems();
     }
     renderItems();
   }
-};
-
-// Function to display results
-let renderResults = function() {
-  let results = document.getElementById('results');
-  appendNewElement('Results:', 'th', results);
-  allStoreItems.forEach(function(item) {
-    let tmp = `${item.votes} votes for ${item.name}`;
-    appendNewElement(tmp, 'tr', results);
-  });
-};
-
-// Helper function to create and append new element into parent
-let appendNewElement = function(content, tag, parentElement) {
-  let newElement = document.createElement(tag);
-  newElement.textContent = content;
-  parentElement.appendChild(newElement);
 };
 
 // Make store items
