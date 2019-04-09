@@ -1,3 +1,55 @@
-/*
-  Add CSS here
-*/
+body {
+  background-color: #f2e3cd;
+}
+
+header {
+  background-color: lightblue;
+  height: 60px;
+}
+
+h1 {
+  font-size: 50px;
+}
+h2 {
+  font-size: 35px;
+  margin: 10px 0;
+}
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+h4 {
+  font-size: 15px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+main {
+  margin: 0 auto;
+  width: 960px;
+}
+
+#survey {
+  display: flex;
+  height: 320px;
+  justify-content: center;
+}
+
+img {
+  max-width: 320px;
+  max-height: 320px;
+}
+
+#remainingVotes {
+  font-weight: bold;
+}
+
+#results {
+  font-size: 20px;
+  text-align: left;
+}
+
+#results th {
+  font-weight: bold;
+}
