@@ -33,12 +33,12 @@ main {
 #survey {
   display: flex;
   height: 320px;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 img {
-  max-width: 320px;
-  max-height: 320px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
 #remainingVotes {
