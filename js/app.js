@@ -1,5 +1,8 @@
 'use strict';
 
+// Array with all the store item names
+let itemNames = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
+
 // Array storing all store items
 let allStoreItems = [];
 
@@ -84,6 +87,23 @@ let drawChart = function() {
   });
 };
 
+// Function to initialize allStoreItems with local storage if present
+let initializeStoreItems = function () {
+  let storageData = JSON.parse(localStorage.getItem('storeItemStats'));
+  if (storageData) {
+    storageData.forEach(function(item) {
+      let newItem = new StoreItem(item['filepath'].split('/')[1]);
+      newItem.votes = item['votes'];
+      newItem.views = item['views'];
+    });
+  } else {
+    itemNames.forEach(function(name) {
+      new StoreItem(name);
+    });
+    localStorage['storeItemStats'] = JSON.stringify(allStoreItems);
+  }
+};
+
 // Event handler for user selection
 let handleItemSelect = function(e) {
   if (e.target.id in curr3Items) {
@@ -91,6 +111,7 @@ let handleItemSelect = function(e) {
     allStoreItems[curr3Items[e.target.id]].votes++;
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
+      localStorage['storeItemStats'] = JSON.stringify(allStoreItems);
       tallyVotes();
       drawChart();
     } else {
@@ -100,27 +121,8 @@ let handleItemSelect = function(e) {
   }
 };
 
-// Make store items
-new StoreItem('bag.jpg');
-new StoreItem('banana.jpg');
-new StoreItem('bathroom.jpg');
-new StoreItem('boots.jpg');
-new StoreItem('breakfast.jpg');
-new StoreItem('bubblegum.jpg');
-new StoreItem('chair.jpg');
-new StoreItem('cthulhu.jpg');
-new StoreItem('dog-duck.jpg');
-new StoreItem('dragon.jpg');
-new StoreItem('pen.jpg');
-new StoreItem('pet-sweep.jpg');
-new StoreItem('scissors.jpg');
-new StoreItem('shark.jpg');
-new StoreItem('sweep.png');
-new StoreItem('tauntaun.jpg');
-new StoreItem('unicorn.jpg');
-new StoreItem('usb.gif');
-new StoreItem('water-can.jpg');
-new StoreItem('wine-glass.jpg');
+// Initialize store items
+initializeStoreItems();
 
 // Get the first 3 items and render them on screen
 get3NewItems();
