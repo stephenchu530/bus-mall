@@ -91,11 +91,7 @@ let drawChart = function() {
 let initializeStoreItems = function () {
   let storageData = JSON.parse(localStorage.getItem('storeItemStats'));
   if (storageData) {
-    storageData.forEach(function(item) {
-      let newItem = new StoreItem(item['filepath'].split('/')[1]);
-      newItem.votes = item['votes'];
-      newItem.views = item['views'];
-    });
+    allStoreItems = storageData;
   } else {
     itemNames.forEach(function(name) {
       new StoreItem(name);
