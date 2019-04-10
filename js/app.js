@@ -20,6 +20,7 @@ let remainingVotes = 25;
 
 // Results data and chart object used to render chart
 let resultsData = {};
+let percentData = {};
 
 // Store item constructor
 let StoreItem = function(imageName) {
@@ -62,9 +63,13 @@ let tallyVotes = function() {
   });
 };
 
+let tallyPercent = function() {
+  allStoreItems.forEach(function(item) {
+    percentData[item.name] = item.votes/item.views;
+  });
+};
+
 // CHART STUFF
-// Charts rendered using Chart JS v.2.6.0
-// http://www.chartjs.org/
 let drawChart = function() {
   let ctx = document.getElementById('resultsChart').getContext('2d');
   new Chart(ctx, { // eslint-disable-line
@@ -82,6 +87,29 @@ let drawChart = function() {
       title: {
         display: true,
         text: 'Vote Results'
+      }
+    }
+  });
+};
+
+// CHART STUFF 2
+let drawPercentChart = function() {
+  let ctx = document.getElementById('percentChart').getContext('2d');
+  new Chart(ctx, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: Object.keys(percentData),
+      datasets: [{
+        label: 'Percent Clicks',
+        backgroundColor: '#fe2357',
+        data: Object.values(percentData)
+      }]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Percent Clicks'
       }
     }
   });
@@ -108,7 +136,9 @@ let handleItemSelect = function(e) {
       survey.removeEventListener('click', handleItemSelect);
       localStorage['storeItemStats'] = JSON.stringify(allStoreItems);
       tallyVotes();
+      tallyPercent();
       drawChart();
+      drawPercentChart();
     } else {
       get3NewItems();
     }
