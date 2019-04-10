@@ -17,7 +17,6 @@ let remainingVotes = 25;
 
 // Results data and chart object used to render chart
 let resultsData = {};
-let resultsChart;
 
 // Store item constructor
 let StoreItem = function(imageName) {
@@ -34,10 +33,10 @@ let get3NewItems = function() {
   curr3Items = {'item1': null, 'item2': null, 'item3': null};
   Object.keys(curr3Items).forEach(function(item) {
     let rand = Math.floor(Math.random() * allStoreItems.length);
-    while (Object.values(prev3Items).includes(allStoreItems[rand]) || Object.values(curr3Items).includes(allStoreItems[rand])) {
+    while (Object.values(prev3Items).includes(rand) || Object.values(curr3Items).includes(rand)) {
       rand = Math.floor(Math.random() * allStoreItems.length);
     }
-    curr3Items[item] = allStoreItems[rand];
+    curr3Items[item] = rand;
     allStoreItems[rand].views++;
   });
 };
@@ -46,9 +45,8 @@ let get3NewItems = function() {
 let renderItems = function() {
   Object.keys(curr3Items).forEach(function(item) {
     let imgEl = document.getElementById(item);
-    imgEl.src = curr3Items[item].filepath;
-    imgEl.alt = curr3Items[item].name;
-    imgEl.title = curr3Items[item].name;
+    imgEl.src = allStoreItems[curr3Items[item]].filepath;
+    imgEl.alt = imgEl.title = allStoreItems[curr3Items[item]].name;
   });
   let remaining = document.getElementById('remainingVotes');
   remaining.textContent = remainingVotes;
@@ -66,13 +64,13 @@ let tallyVotes = function() {
 // http://www.chartjs.org/
 let drawChart = function() {
   let ctx = document.getElementById('resultsChart').getContext('2d');
-  resultsChart = new Chart(ctx, {
+  new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
       labels: Object.keys(resultsData),
       datasets: [{
-        label: "Vote Results",
-        backgroundColor: "#3e95cd",
+        label: 'Vote Results',
+        backgroundColor: '#3e95cd',
         data: Object.values(resultsData)
       }]
     },
@@ -83,14 +81,14 @@ let drawChart = function() {
         text: 'Vote Results'
       }
     }
-  })
+  });
 };
 
 // Event handler for user selection
 let handleItemSelect = function(e) {
-  if (Object.keys(curr3Items).includes(e.target.id)) {
+  if (e.target.id in curr3Items) {
     remainingVotes--;
-    curr3Items[e.target.id].votes++;
+    allStoreItems[curr3Items[e.target.id]].votes++;
     if (remainingVotes === 0) {
       survey.removeEventListener('click', handleItemSelect);
       tallyVotes();
