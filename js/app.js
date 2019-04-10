@@ -18,7 +18,7 @@ let survey = document.getElementById('survey');
 // Number of remaining votes
 let remainingVotes = 25;
 
-// Results data and chart object used to render chart
+// Results & percent data and chart object used to render chart
 let resultsData = {};
 let percentData = {};
 
@@ -63,13 +63,14 @@ let tallyVotes = function() {
   });
 };
 
+// Function to calc percentages
 let tallyPercent = function() {
   allStoreItems.forEach(function(item) {
     percentData[item.name] = item.votes/item.views;
   });
 };
 
-// CHART STUFF
+// Cummulative voting results
 let drawChart = function() {
   let ctx = document.getElementById('resultsChart').getContext('2d');
   new Chart(ctx, { // eslint-disable-line
@@ -92,7 +93,7 @@ let drawChart = function() {
   });
 };
 
-// CHART STUFF 2
+// Percentage click chart
 let drawPercentChart = function() {
   let ctx = document.getElementById('percentChart').getContext('2d');
   new Chart(ctx, { // eslint-disable-line
