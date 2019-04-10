@@ -100,7 +100,6 @@ let initializeStoreItems = function () {
     itemNames.forEach(function(name) {
       new StoreItem(name);
     });
-    localStorage['storeItemStats'] = JSON.stringify(allStoreItems);
   }
 };
 
